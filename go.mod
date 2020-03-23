@@ -7,6 +7,7 @@ require (
 	github.com/decred/dcrd/dcrutil v1.4.0
 	github.com/decred/dcrd/dcrutil/v2 v2.0.1
 	github.com/decred/slog v1.0.0
+	github.com/google/pprof v0.0.0-20200229191704-1ebb73c60ed3 // indirect
 	github.com/jessevdk/go-flags v1.4.0
 	github.com/jrick/logrotate v1.0.0
 	github.com/markbates/pkger v0.14.1
@@ -14,6 +15,7 @@ require (
 	github.com/onsi/gomega v1.8.1
 	github.com/raedahgroup/dcrlibwallet v1.1.1-0.20200130094829-d902833f4f05
 	golang.org/x/exp v0.0.0-20191002040644-a1355ae1e2c3
+	golang.org/x/sys v0.0.0-20200321134203-328b4cd54aae // indirect
 )
 
 // TODO: Remove and use an actual release of dcrlibwallet

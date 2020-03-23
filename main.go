@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"runtime"
+	"runtime/pprof"
 	"sync"
 
 	app "gioui.org/app"
@@ -15,6 +18,11 @@ import (
 	"github.com/raedahgroup/dcrlibwallet"
 	"github.com/raedahgroup/godcr-gio/ui"
 	"github.com/raedahgroup/godcr-gio/wallet"
+)
+
+var (
+	cpuprofile = true
+	memprofile = true
 )
 
 func main() {
@@ -54,6 +62,18 @@ func main() {
 		confirms = 0
 	}
 
+	if cpuprofile {
+		f, err := os.Create("cprofile.pprof")
+		if err != nil {
+			log.Error("could not create CPU profile: ", err)
+		}
+		defer f.Close() // error handling omitted for example
+		if err := pprof.StartCPUProfile(f); err != nil {
+			log.Error("could not start CPU profile: ", err)
+		}
+		defer pprof.StopCPUProfile()
+	}
+
 	wal, _ := wallet.NewWallet(cfg.HomeDir, cfg.Network, make(chan wallet.Response, 3), confirms)
 	wal.LoadWallets()
 
@@ -78,4 +98,16 @@ func main() {
 
 	app.Main()
 	wg.Wait()
+
+	if memprofile {
+		f, err := os.Create("memprofile.pprof")
+		if err != nil {
+			log.Error("could not create memory profile: ", err)
+		}
+		defer f.Close() // error handling omitted for example
+		runtime.GC()    // get up-to-date statistics
+		if err := pprof.WriteHeapProfile(f); err != nil {
+			log.Error("could not write memory profile: ", err)
+		}
+	}
 }
