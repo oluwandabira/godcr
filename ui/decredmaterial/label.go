@@ -3,8 +3,10 @@
 package decredmaterial
 
 import (
+	"image"
 	"image/color"
 
+	"gioui.org/io/pointer"
 	"gioui.org/layout"
 	"gioui.org/op/paint"
 	"gioui.org/text"
@@ -76,4 +78,16 @@ func (l Label) Layout(gtx *layout.Context) {
 	paint.ColorOp{Color: l.Color}.Add(gtx.Ops)
 	tl := widget.Label{Alignment: l.Alignment, MaxLines: l.MaxLines}
 	tl.Layout(gtx, l.shaper, l.Font, l.TextSize, l.Text)
+}
+
+func (l Label) LayoutWithButton(gtx *layout.Context, button *widget.Button) {
+	layout.Stack{Alignment: layout.Center}.Layout(gtx,
+		layout.Stacked(func() {
+			l.Layout(gtx)
+		}),
+		layout.Expanded(func() {
+			pointer.Rect(image.Rectangle{Max: gtx.Dimensions.Size}).Add(gtx.Ops)
+			button.Layout(gtx)
+		}),
+	)
 }
