@@ -24,6 +24,7 @@ type pageCommon struct {
 	page           *string
 	navTab         *decredmaterial.Tabs
 	walletsTab     *decredmaterial.Tabs
+	err            *error
 }
 
 func (win *Window) addPages() {
@@ -65,12 +66,13 @@ func (win *Window) addPages() {
 		page:           &win.current,
 		navTab:         tabs,
 		walletsTab:     decredmaterial.NewTabs(),
+		err:            win.lastErr,
 		//cancelDialogW:  win.theme.PlainIconButton(icons.contentClear),
 	}
 
 	win.pages = make(map[string]layout.Widget)
 
-	win.pages[PageWallet] = win.WalletPage(common)
+	win.pages[PageWallet] = WalletPage(common)
 	win.pages[PageOverview] = win.OverviewPage
 	win.pages[PageTransactions] = win.TransactionsPage
 	win.pages[PageReceive] = win.Receive
