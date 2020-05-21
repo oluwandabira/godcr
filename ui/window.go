@@ -44,7 +44,8 @@ type Window struct {
 
 	combined
 	outputs
-	pages map[string]layout.Widget
+	pages   map[string]layout.Widget
+	lastErr *error
 }
 
 // CreateWindow creates and initializes a new window with start
@@ -108,6 +109,7 @@ func (win *Window) Loop(shutdown chan int) {
 					return
 				}
 				win.err = err
+				*win.lastErr = e.Err
 				if win.states.loading {
 					log.Warn("Attemping to get multiwallet info")
 					win.wallet.GetMultiWalletInfo()
